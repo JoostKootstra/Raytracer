@@ -47,7 +47,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Arch\Camera.cs" />
+    <Compile Include="Arch\Light.cs" />
+    <Compile Include="Arch\Plane.cs" />
+    <Compile Include="Arch\Ray.cs" />
+    <Compile Include="Arch\Raytracer.cs" />
+    <Compile Include="Arch\Sphere.cs" />
     <Compile Include="MyApplication.cs" />
+    <Compile Include="Arch\IPrimitive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="surface.cs" />
     <Compile Include="template.cs" />
