@@ -12,8 +12,6 @@ namespace INFOGR2022Template
 		public void Tick()
 		{
 			screen.Clear( 0 );
-			
-			
 		}
 	}
 }

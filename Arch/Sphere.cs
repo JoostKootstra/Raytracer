@@ -10,8 +10,8 @@ namespace INFOGR2022Template
 {
     internal class Sphere : IPrimitive
     {
-        Vector3 Color { get; }
-        Vector3 Normal { get; }
+        public Vector3 Color { get; }
+        public Vector3 Normal { get; }
         Vector3 Position { get; }
         Vector3 Center { get; }
         float Radius { get; }
@@ -24,6 +24,19 @@ namespace INFOGR2022Template
             this.Color = color;
         }
 
+        public bool Intersect(Ray ray)
+        {
+            return true;
+        }
 
+        public void Draw()
+        {
+
+        }
+
+        public void DDraw()
+        {
+
+        }
     }
 }
