@@ -12,9 +12,9 @@ namespace INFOGR2022Template
     {
         public Vector3 Color { get; }
         public Vector3 Normal { get; }
-        Vector3 Position { get; }
-        Vector3 Center { get; }
-        float Radius { get; }
+        public Vector3 Position { get; }
+        public Vector3 Center { get; }
+        public float Radius { get; }
 
         public Sphere(Vector3 position, float radius, Vector3 color)
         {
@@ -31,12 +31,12 @@ namespace INFOGR2022Template
 
         public void Draw()
         {
-
-        }
-
-        public void DDraw()
-        {
-
+            int c = Color.ToInt();
+            for (int i = 0; i < 100; i++)
+            {
+                OpenTKApp.app.debugscreen.Line((int)(Position.X + Radius * Math.Cos((float)i / 100 * 2 * Math.PI)), (int)(Position.Z + Radius * Math.Sin((float)i / 100 * 2 * Math.PI)),
+                                          (int)(Position.X + Radius * Math.Cos(((float)i + 1) / 100 * 2 * Math.PI)), (int)(Position.Z + Radius * Math.Sin(((float)i + 1) / 100 * 2 * Math.PI)),c);
+            }
         }
     }
 }

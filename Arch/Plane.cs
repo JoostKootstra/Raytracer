@@ -10,7 +10,14 @@ namespace INFOGR2022Template
     internal class Plane : IPrimitive
     {
         public Vector3 Color { get; }
-        public Vector3 Normal { get; }
+        public Vector3 Position { get; set; }
+        public Vector3 Normal { get; set; }
+        public Vector3 Up { get; set; }
+        public Vector3 Right { get; set; }
+        public Vector3 p0 { get; set; }
+        public Vector3 p1 { get; set; }
+        public Vector3 p2 { get; set; }
+        public Vector3 p3 { get; set; }
         float Distance { get; }
         
 

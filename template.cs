@@ -23,8 +23,8 @@ namespace INFOGR2022Template
 {
 	public class OpenTKApp : GameWindow
 	{
-		static int screenID;            // unique integer identifier of the OpenGL texture
-		static MyApplication app;       // instance of the application
+		static int screenID, screenID2;            // unique integer identifier of the OpenGL texture
+		public static MyApplication app;       // instance of the application
 		static bool terminated = false; // application terminates gracefully when this is true
 		protected override void OnLoad( EventArgs e )
 		{
@@ -35,9 +35,11 @@ namespace INFOGR2022Template
 			GL.Hint( HintTarget.PerspectiveCorrectionHint, HintMode.Nicest );
 			ClientSize = new Size( 1024, 512 );
 			app = new MyApplication();
-			app.screen = new Surface( Width, Height );
-			Sprite.target = app.screen;
-			screenID = app.screen.GenTexture();
+			app.debugscreen = new Surface( Width / 2, Height );
+			app.tracerscreen = new Surface(Width / 2, Height);
+			Sprite.target = app.tracerscreen;
+			screenID = app.debugscreen.GenTexture();
+			screenID2 = app.tracerscreen.GenTexture();
 			app.Init();
 		}
 		protected override void OnUnload( EventArgs e )
@@ -72,16 +74,30 @@ namespace INFOGR2022Template
 			// convert MyApplication.screen to OpenGL texture
 			GL.BindTexture( TextureTarget.Texture2D, screenID );
 			GL.TexImage2D( TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
-						   app.screen.width, app.screen.height, 0,
+						   app.debugscreen.width, app.debugscreen.height, 0,
 						   OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
-						   PixelType.UnsignedByte, app.screen.pixels
+						   PixelType.UnsignedByte, app.debugscreen.pixels
 						 );
 			// draw screen filling quad
 			GL.Begin( PrimitiveType.Quads );
 			GL.TexCoord2( 0.0f, 1.0f ); GL.Vertex2( -1.0f, -1.0f );
-			GL.TexCoord2( 1.0f, 1.0f ); GL.Vertex2( 1.0f, -1.0f );
-			GL.TexCoord2( 1.0f, 0.0f ); GL.Vertex2( 1.0f, 1.0f );
+			GL.TexCoord2( 1.0f, 1.0f ); GL.Vertex2( 0.0f, -1.0f );
+			GL.TexCoord2( 1.0f, 0.0f ); GL.Vertex2( 0.0f, 1.0f );
 			GL.TexCoord2( 0.0f, 0.0f ); GL.Vertex2( -1.0f, 1.0f );
+			GL.End();
+
+			GL.BindTexture(TextureTarget.Texture2D, screenID);
+			GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba,
+						   app.tracerscreen.width, app.tracerscreen.height, 0,
+						   OpenTK.Graphics.OpenGL.PixelFormat.Bgra,
+						   PixelType.UnsignedByte, app.tracerscreen.pixels
+						 );
+			// draw screen filling quad
+			GL.Begin(PrimitiveType.Quads);
+			GL.TexCoord2(0.0f, 1.0f); GL.Vertex2(0.0f, -1.0f);
+			GL.TexCoord2(1.0f, 1.0f); GL.Vertex2(1.0f, -1.0f);
+			GL.TexCoord2(1.0f, 0.0f); GL.Vertex2(1.0f, 1.0f);
+			GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(0.0f, 1.0f);
 			GL.End();
 			// tell OpenTK we're done rendering
 			SwapBuffers();

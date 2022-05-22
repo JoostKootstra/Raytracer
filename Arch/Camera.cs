@@ -7,28 +7,31 @@ using OpenTK;
 
 namespace INFOGR2022Template
 {
-    internal class Camera
+    public class Camera
     {
-        Vector3 Position { get; set; }
-        Vector3 LookAt { get; set; }
-        Vector3 Up { get; set; }
-        Vector3 Right { get; set; }
-        Vector3 p0 { get; set; }
-        Vector3 p1 { get; set; }
-        Vector3 p2 { get; set; }
-        Vector3 p3 { get; set; }
+        public Vector3 Position { get; set; }
+        public Vector3 LookAt { get; set; }
+        public Vector3 Up { get; set; }
+        public Vector3 Right { get; set; }
+        public Vector3 p0 { get; set; }
+        public Vector3 p1 { get; set; }
+        public Vector3 p2 { get; set; }
+        public Vector3 u { get; }
+        public Vector3 v { get; }
+        //public Vector3 p3 { get; set; }
         
         public Camera(Vector3 Position, Vector3 LookAt, Vector3 UpDir)
         {
-            this.Position = Vector3.Normalize(Position);
-            this.LookAt = Vector3.Normalize(LookAt);
-            this.Up = Vector3.Normalize(UpDir);
-            Right = Vector3.Cross(LookAt, UpDir);
-
-            p0 = Position + Up + Right;
-            p1 = Position - Up + Right;
+            this.Position = Position;
+            this.Up = UpDir;
+            p0 = Position + Up - Right;
+            p1 = Position + Up + Right;
             p2 = Position - Up - Right;
-            p3 = Position + Up - Right;
+            u = p1 - p0;
+            v = p2 - p0;
+            this.LookAt = LookAt.Normalized();
+            this.Up = UpDir.Normalized();
+            Right = Vector3.Cross(LookAt, UpDir);
         }
 
     }
