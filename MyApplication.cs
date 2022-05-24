@@ -28,10 +28,14 @@ namespace INFOGR2022Template
 			if (!input.IsKeyDown(Key.A) && !input.IsKeyDown(Key.D))
             {
 				//shoots a ray for every pixel
-				tracer.Shoot();
+				
 			}
-			if (input.IsKeyDown(Key.A)) tracer.cam.Position -= new Vector3(10, 0, 0);
-			if (input.IsKeyDown(Key.D)) tracer.cam.Position += new Vector3(10, 0, 0);
+			tracer.Shoot();
+			if (input.IsKeyDown(Key.A)) tracer.Eye -= new Vector3(10, 0, 0);
+			if (input.IsKeyDown(Key.D)) tracer.Eye += new Vector3(10, 0, 0);
+			if (input.IsKeyDown(Key.S)) tracer.Eye += new Vector3(0, 0, 10);
+			if (input.IsKeyDown(Key.W)) tracer.Eye -= new Vector3(0, 0, 10);
+
 			debugscreen.Clear(0);
 			tracerscreen.Clear(0xFF);
 			tracer.DrawDebug();

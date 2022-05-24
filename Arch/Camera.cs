@@ -18,7 +18,6 @@ namespace INFOGR2022Template
         public Vector3 p2 { get; set; }
         public Vector3 u { get; set; }
         public Vector3 v { get; set; }
-        //public Vector3 p3 { get; set; }
         
         public Camera(Vector3 Position, Vector3 LookAt, Vector3 UpDir)
         {
@@ -28,20 +27,20 @@ namespace INFOGR2022Template
             this.LookAt = LookAt.Normalized();
             this.Up = UpDir.Normalized();
             Right = Vector3.Cross(LookAt, UpDir);
-            this.Right = this.Right.Normalized();
+            this.Right = 80*this.Right.Normalized();
 
-            p0 = Position + Up - Right + this.LookAt;
-            p1 = Position + Up + Right + this.LookAt;
-            p2 = Position - Up - Right + this.LookAt;
+            p0 = Position + Up - Right;
+            p1 = Position + Up + Right;
+            p2 = Position - Up - Right;
             u = p1 - p0;
             v = p2 - p0;
         }
 
         public void Update()
         {
-            p0 = Position + Up - Right + this.LookAt;
-            p1 = Position + Up + Right + this.LookAt;
-            p2 = Position - Up - Right + this.LookAt;
+            p0 = Position + Up - Right;
+            p1 = Position + Up + Right;
+            p2 = Position - Up - Right;
             u = p1 - p0;
             v = p2 - p0;
         }

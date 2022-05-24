@@ -16,7 +16,8 @@ namespace INFOGR2022Template
 		public List<Ray> _shadowrays { get; set; }
 		public List<Intersection> _intersections { get; set; }
 
-		public Camera cam = new Camera(new Vector3(256, 256, 480), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
+		public Vector3 Eye = new Vector3(new Vector3(256, 256, 480));
+		public Camera cam = new Camera(new Vector3(256, 256, 400), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
 		public Light light = new Light(new Vector3(512, 600, 256), 1);
 
 		Sphere sphere1 = new Sphere(new Vector3(256, 256, 100), 50, new Vector3(0, 0, 1));
@@ -43,19 +44,21 @@ namespace INFOGR2022Template
 		public void Shoot()
         {
 			_rays.Clear();
+			int id = 0;
 			for (int i = 0; i < 512; i++)
 				for (float j = 0; j < 512; j++)
 				{
 					//calculate direction of ray
-					Vector3 dir = (cam.p0 + (j / 512f) * cam.u + (i / 512f) * cam.v) - cam.Position;
-					_rays.Add(new Ray(cam.Position, dir));
+					Vector3 dir = (cam.p0 + (j / 512f) * cam.u + (i / 512f) * cam.v) - Eye;
+					_rays.Add(new Ray(Eye, dir, id));
+					id++;
 				}
 		}
 
 		public void DrawDebug()
 		{
 			//draw the rays of the middle of the screen
-			for (int i = 130560; i < 131072; i += 10)
+			for (int i = 130560; i < 131072; i += 15)
 			{
 				foreach (Sphere s in _spheres)
 				{
@@ -71,7 +74,7 @@ namespace INFOGR2022Template
 
 			//draw eye and screen on debug
 			OpenTKApp.app.debugscreen.Line((int)cam.Position.X - 80, 400, (int)cam.Position.X + 80, 400, 0xFFFFFF);
-			OpenTKApp.app.debugscreen.Plot((int)cam.Position.X, (int)cam.Position.Z, 0xFFFFFF);
+			OpenTKApp.app.debugscreen.Plot((int)Eye.X, (int)Eye.Z, 0xFFFFFF);
 		}
 
 		public void IntersectS(Sphere sphere, Ray ray)
@@ -105,12 +108,13 @@ namespace INFOGR2022Template
 
 		public void Render()
         {
+			int id = 0;
 			foreach (Intersection i in _intersections)
             {
 				foreach (Light l in _lights)
                 {
 					Vector3 Origin = new Vector3(i.ray.Origin.X + i.ray.Direction.X * i.ray.t, i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t, i.ray.Origin.Z + i.ray.Direction.Z * i.ray.t);
-					_shadowrays.Add(new Ray(Origin, l.Position - Origin));
+					_shadowrays.Add(new Ray(Origin, l.Position - Origin, i.ray.ID));
 				}
             }
 

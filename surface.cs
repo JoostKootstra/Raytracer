@@ -12,6 +12,7 @@ namespace INFOGR2022Template
 		static bool fontReady = false;
 		static Surface font;
 		static int[] fontRedir;
+		 
 		// surface constructor
 		public Surface( int w, int h )
 		{
