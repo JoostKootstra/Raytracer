@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Arch\Camera.cs" />
+    <Compile Include="Arch\Intersection.cs" />
     <Compile Include="Arch\Light.cs" />
     <Compile Include="Arch\Plane.cs" />
     <Compile Include="Arch\Ray.cs" />

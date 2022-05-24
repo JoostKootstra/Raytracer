@@ -8,10 +8,10 @@ using OpenTK;
 
 namespace INFOGR2022Template
 {
-    internal class Sphere : IPrimitive
+    public class Sphere : IPrimitive
     {
         public Vector3 Color { get; }
-        public Vector3 Normal { get; }
+        public Vector3 Normal { get; set; }
         public Vector3 Position { get; }
         public Vector3 Center { get; }
         public float Radius { get; }
@@ -24,10 +24,7 @@ namespace INFOGR2022Template
             this.Color = color;
         }
 
-        public bool Intersect(Ray ray)
-        {
-            return true;
-        }
+        
 
         public void Draw()
         {

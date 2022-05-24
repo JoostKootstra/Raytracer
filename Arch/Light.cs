@@ -7,9 +7,9 @@ using OpenTK;
 
 namespace INFOGR2022Template
 {
-    internal class Light
+    public class Light
     {
-        Vector3 Position { get; }
+        public Vector3 Position { get; }
         float Intensity { get; }
         public Light(Vector3 position, float intensity)
         {

@@ -17,5 +17,10 @@ namespace INFOGR2022Template
             int z = (int)Math.Round(c.Z);
             return (x << 16) + (y << 8) + z;
         }
+
+        public static float ToP(this float f)
+        {
+            return f * (OpenTKApp.app.debugscreen.width) + (OpenTKApp.app.debugscreen.width / 2);
+        }
     }
 }

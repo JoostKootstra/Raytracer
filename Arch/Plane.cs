@@ -7,7 +7,7 @@ using OpenTK;
 
 namespace INFOGR2022Template
 {
-    internal class Plane : IPrimitive
+    public class Plane : IPrimitive
     {
         public Vector3 Color { get; }
         public Vector3 Position { get; set; }
@@ -18,29 +18,15 @@ namespace INFOGR2022Template
         public Vector3 p1 { get; set; }
         public Vector3 p2 { get; set; }
         public Vector3 p3 { get; set; }
-        float Distance { get; }
+        public float Distance { get; }
         
 
         public Plane(Vector3 normal, float distance, Vector3 Color)
         {
-            this.Normal = Vector3.Normalize(normal);
+            this.Normal = normal.Normalized();
             this.Distance = distance;
             this.Color = Color;
         }
 
-        public bool Intersect(Ray ray)
-        {
-            return true;
-        }
-
-        public void Draw()
-        {
-
-        }
-
-        public void DDraw()
-        {
-
-        }
     }
 }
