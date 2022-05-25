@@ -23,6 +23,7 @@ namespace INFOGR2022Template
 
         public Plane(Vector3 normal, float distance, Vector3 Color)
         {
+            Position = new Vector3(200, 256, 256);
             this.Normal = normal.Normalized();
             this.Distance = distance;
             this.Color = Color;

@@ -12,9 +12,9 @@ namespace INFOGR2022Template
         public static int ToInt(this Vector3 c)
         {
             c *= 255;
-            int x = (int)Math.Round(c.X);
-            int y = (int)Math.Round(c.Y);
-            int z = (int)Math.Round(c.Z);
+            int x = (int)Math.Round(Math.Min(Math.Max(c.X, 0), 255));
+            int y = (int)Math.Round(Math.Min(Math.Max(c.Y, 0), 255));
+            int z = (int)Math.Round(Math.Min(Math.Max(c.Z, 0), 255));
             return (x << 16) + (y << 8) + z;
         }
 
