@@ -36,7 +36,7 @@ namespace INFOGR2022Template
             if ((t < ray.t) && (t > 0))
             {
                 ray.t = t;
-                Intersection temp = new Intersection(this, ray);
+                Intersection temp = new Intersection(this, ray, Normal);
                 return temp;   
             }
             return null;

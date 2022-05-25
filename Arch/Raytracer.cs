@@ -19,7 +19,7 @@ namespace INFOGR2022Template
 
 		public Vector3 Eye = new Vector3(new Vector3(256, 256, 480));
 		public Camera cam = new Camera(new Vector3(256, 256, 400), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
-		public Light light = new Light(new Vector3(512, 300, 256), 1);
+		public Light light = new Light(new Vector3(330, 256, 180), 1);
 
 		Sphere sphere1 = new Sphere(new Vector3(256, 256, 100), 50, new Vector3(0, 0, 1));
 		Sphere sphere2 = new Sphere(new Vector3(128, 256, 100), 70, new Vector3(1, 0, 0));
@@ -39,13 +39,7 @@ namespace INFOGR2022Template
 			primitives.Add(sphere1);
 			primitives.Add(sphere2);
 			primitives.Add(sphere3);
-			//primitives.Add(plane1);
-			/*
-			_spheres.Add(sphere1);
-			_spheres.Add(sphere2);
-			_spheres.Add(sphere3);
-			*/
-			//_planes.Add(plane1);
+			primitives.Add(plane1);
 		}
 
 
@@ -69,7 +63,7 @@ namespace INFOGR2022Template
 				}
 		}
 
-		public void DrawDebug()
+		public void Render()
 		{
 			foreach (IPrimitive s in primitives) (s as Sphere)?.Draw();
 
@@ -79,34 +73,22 @@ namespace INFOGR2022Template
 
 			foreach (Intersection i in _intersections)
             {
-				
+				OpenTKApp.app.tracerscreen.pixels[i.ray.ID] = i.Color.ToInt();
+
 				Vector3 Origin = new Vector3(i.ray.Origin.X + i.ray.Direction.X * i.ray.t, i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t, i.ray.Origin.Z + i.ray.Direction.Z * i.ray.t);
-				Ray shadowray = new Ray(light.Position, Origin - light.Position, i.ray.ID);
+				Ray shadowray = new Ray(Origin + i.Normal.Normalized(), light.Position - Origin, i.ray.ID);
 				shadowray.t = Vector3.Distance(light.Position, Origin);
-				foreach (IPrimitive p in primitives) p.Intersect(shadowray);
-				if (i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t == 256 && i.ray.ID % 33 == 0)
-				{
-					shadowray.DrawS();
-				}
+
+				Intersection temp = null;
+				foreach (IPrimitive p in primitives) temp = p.Intersect(shadowray) ?? temp;
+
+				if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) OpenTKApp.app.tracerscreen.pixels[shadowray.ID] = 0;
+				if (i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t == 256 ) shadowray.DrawS();
 				
             }
 		}
 		
-		public void Render()
-        {
-			foreach (Intersection i in _intersections)
-            {
-				foreach (Light l in _lights)
-                {
-					Vector3 Origin = new Vector3(i.ray.Origin.X + i.ray.Direction.X * i.ray.t, i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t, i.ray.Origin.Z + i.ray.Direction.Z * i.ray.t);
-					Ray shadowray = new Ray(Origin, l.Position - Origin, i.ray.ID);
-					foreach (IPrimitive p in primitives) p.Intersect(shadowray);
-				}
 
-				OpenTKApp.app.tracerscreen.pixels[i.ray.ID] = i.prim.Color.ToInt();
-            }
-
-        }
 
 	}
 }

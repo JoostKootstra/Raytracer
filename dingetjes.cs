@@ -22,5 +22,13 @@ namespace INFOGR2022Template
         {
             return f * (OpenTKApp.app.debugscreen.width) + (OpenTKApp.app.debugscreen.width / 2);
         }
+
+        public static int CalcColor(this Ray sr, Vector3 inter, IPrimitive p)
+        {
+            int c = 0;
+            if (sr.t == Vector3.Distance(sr.Origin, inter)) c = p.Color.ToInt();
+
+            return c;
+        }
     }
 }

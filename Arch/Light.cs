@@ -9,7 +9,7 @@ namespace INFOGR2022Template
 {
     public class Light
     {
-        public Vector3 Position { get; }
+        public Vector3 Position { get; set; }
         float Intensity { get; }
         public Light(Vector3 position, float intensity)
         {

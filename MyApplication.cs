@@ -33,11 +33,17 @@ namespace INFOGR2022Template
 			if (input.IsKeyDown(Key.Z)) tracer.Eye += new Vector3(0, 10, 0);
 			if (input.IsKeyDown(Key.X)) tracer.Eye -= new Vector3(0, 10, 0);
 
+			if (input.IsKeyDown(Key.Right)) tracer.light.Position += new Vector3(10, 0, 0);
+			if (input.IsKeyDown(Key.Left)) tracer.light.Position -= new Vector3(10, 0, 0);
+			if (input.IsKeyDown(Key.Up)) tracer.light.Position -= new Vector3(0, 0, 10);
+			if (input.IsKeyDown(Key.Down)) tracer.light.Position += new Vector3(0, 0, 10);
+			if (input.IsKeyDown(Key.Space)) tracer.light.Position += new Vector3(0, 10, 0);
+			if (input.IsKeyDown(Key.ShiftLeft)) tracer.light.Position -= new Vector3(0, 10, 0);
+
 
 			debugscreen.Clear(0);
 			tracerscreen.Clear(0);
 			tracer.Shoot();
-			tracer.DrawDebug();
 			tracer.Render();
 			tracer._intersections.Clear();
 			//tracer.Render();

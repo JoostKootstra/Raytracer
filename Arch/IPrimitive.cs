@@ -10,7 +10,6 @@ namespace INFOGR2022Template
     public interface IPrimitive
     {
         Vector3 Color { get; }
-        Vector3 Normal { get; }
 
         Intersection Intersect(Ray ray);
 

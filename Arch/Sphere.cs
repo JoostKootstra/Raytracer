@@ -11,7 +11,6 @@ namespace INFOGR2022Template
     public class Sphere : IPrimitive
     {
         public Vector3 Color { get; }
-        public Vector3 Normal { get; set; }
         public Vector3 Position { get; }
         public Vector3 Center { get; }
         public float Radius { get; }
@@ -36,8 +35,8 @@ namespace INFOGR2022Template
             if ((t < ray.t) && (t > 0))
             {
                 ray.t = t;
-                Normal = (ray.Origin + ray.Direction * ray.t) - Position;
-                Intersection temp = new Intersection(this, ray);
+                Vector3 Normal = (ray.Origin + ray.Direction * ray.t) - Position;
+                Intersection temp = new Intersection(this, ray, Normal);
                 return temp;
             }
             return null;
