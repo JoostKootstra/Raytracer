@@ -28,5 +28,19 @@ namespace INFOGR2022Template
             this.Color = Color;
         }
 
+        public Intersection Intersect(Ray ray)
+        {
+            float f = Vector3.Dot(ray.Direction, Normal);
+            if (Math.Abs(f) < 0.0000001) return null;
+            float t = (Distance - Vector3.Dot(ray.Origin, Normal)) / f;
+            if ((t < ray.t) && (t > 0))
+            {
+                ray.t = t;
+                Intersection temp = new Intersection(this, ray);
+                return temp;   
+            }
+            return null;
+        }
+
     }
 }

@@ -12,13 +12,15 @@ namespace INFOGR2022Template
         public Vector3 Normal { get; set; }
         public Ray ray { get; set; }
         float d { get; set; }
-        IPrimitive prim { get; set; }
+        public IPrimitive prim { get; set; }
+        public Vector3 Color { get; set; }
 
         public Intersection(IPrimitive primitive, Ray r)
         {
             prim = primitive;
             ray = r;
             Normal = prim.Normal;
+            Color = prim.Color;
         }
     }
 }

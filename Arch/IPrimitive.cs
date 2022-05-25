@@ -12,6 +12,8 @@ namespace INFOGR2022Template
         Vector3 Color { get; }
         Vector3 Normal { get; }
 
+        Intersection Intersect(Ray ray);
+
 
     }
 }

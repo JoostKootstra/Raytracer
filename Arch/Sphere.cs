@@ -24,7 +24,24 @@ namespace INFOGR2022Template
             this.Color = color;
         }
 
-        
+        public Intersection Intersect(Ray ray)
+        {
+            Vector3 c = Center - ray.Origin;
+            float t = Vector3.Dot(c, ray.Direction);
+            Vector3 q = c - t * ray.Direction;
+            float p2 = q.LengthSquared;
+
+            if (p2 > Radius * Radius) return null;
+            t -= (float)Math.Sqrt((Radius * Radius) - p2);
+            if ((t < ray.t) && (t > 0))
+            {
+                ray.t = t;
+                Normal = (ray.Origin + ray.Direction * ray.t) - Position;
+                Intersection temp = new Intersection(this, ray);
+                return temp;
+            }
+            return null;
+        }
 
         public void Draw()
         {

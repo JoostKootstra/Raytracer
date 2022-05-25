@@ -25,9 +25,9 @@ namespace INFOGR2022Template
             this.Up = UpDir;
             
             this.LookAt = LookAt.Normalized();
-            this.Up = UpDir.Normalized();
+            this.Up = 80 * UpDir.Normalized();
             Right = Vector3.Cross(LookAt, UpDir);
-            this.Right = 80*this.Right.Normalized();
+            this.Right = 80 * this.Right.Normalized();
 
             p0 = Position + Up - Right;
             p1 = Position + Up + Right;
