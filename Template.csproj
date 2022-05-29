@@ -54,8 +54,7 @@
     <Compile Include="Arch\Ray.cs" />
     <Compile Include="Arch\Raytracer.cs" />
     <Compile Include="Arch\Sphere.cs" />
-    <Compile Include="Arch\Triangle.cs" />
-    <Compile Include="dingetjes.cs" />
+    <Compile Include="converts.cs" />
     <Compile Include="MyApplication.cs" />
     <Compile Include="Arch\IPrimitive.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

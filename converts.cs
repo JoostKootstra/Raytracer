@@ -7,8 +7,9 @@ using OpenTK;
 
 namespace INFOGR2022Template
 {
-    static class dingetjes
+    static class converts
     {
+        // convert Vector3 color to integer color by shifting bits
         public static int ToInt(this Vector3 c)
         {
             c *= 255;
@@ -18,6 +19,7 @@ namespace INFOGR2022Template
             return (x << 16) + (y << 8) + z;
         }
 
+        // convert integer color to Vector3 color by 
         public static Vector3 ToVector(this int i)
         {
             byte r, g, b;
@@ -30,19 +32,6 @@ namespace INFOGR2022Template
                 r = (byte)i;
             }
             return new Vector3(r / 255f, g / 255f, b / 255f);
-        }
-
-        public static float ToP(this float f)
-        {
-            return f * (OpenTKApp.app.debugscreen.width) + (OpenTKApp.app.debugscreen.width / 2);
-        }
-
-        public static int CalcColor(this Ray sr, Vector3 inter, IPrimitive p)
-        {
-            int c = 0;
-            if (sr.t == Vector3.Distance(sr.Origin, inter)) c = p.Color.ToInt();
-
-            return c;
         }
     }
 }

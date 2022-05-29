@@ -31,14 +31,21 @@ namespace INFOGR2022Template
             Material = material;
         }
 
+
+        // calculate intersection between ray and plane.
         public Intersection Intersect(Ray ray)
         {
             float f = Vector3.Dot(ray.Direction, Normal);
+
+            // if angle between plane and direction of the ray is too small, we consider them parallel and thus no intersection
             if (Math.Abs(f) < 0.0000001) return null;
-            float t = (Distance - Vector3.Dot(ray.Origin, Normal)) / f;
-            if ((t < ray.t) && (t > 0))
+
+            // calculate distance to intersection and check if it's smaller than the distance set by a previous intersection
+            // if the distance is smaller, update t and return intersection
+            float distance_to_inter = (Distance - Vector3.Dot(ray.Origin, Normal)) / f;
+            if ((distance_to_inter < ray.t) && (distance_to_inter > 0))
             {
-                ray.t = t;
+                ray.t = distance_to_inter;
                 Intersection temp = new Intersection(this, ray, Normal);
                 return temp;   
             }

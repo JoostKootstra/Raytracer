@@ -17,8 +17,7 @@ namespace INFOGR2022Template
 		public List<Intersection> _intersections { get; set; }
 		public List<Intersection> _mirrorinters { get; set; }
 		public List<IPrimitive> primitives { get; set; }
-		public List<int> notShadow { get; set; }
-
+		
 		public Vector3 Eye = new Vector3(new Vector3(256, 256, 480));
 		public Camera cam = new Camera(new Vector3(256, 256, 400), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
 		public Light light = new Light(new Vector3(330, 256, 180), new Vector3(1, 0, 0));
@@ -31,6 +30,7 @@ namespace INFOGR2022Template
 
 		public Raytracer()
         {
+			// set Lists
 			primitives = new List<IPrimitive>();
 			_spheres = new List<Sphere>();
 			_planes = new List<Plane>();
@@ -39,8 +39,8 @@ namespace INFOGR2022Template
 			_intersections = new List<Intersection>();
 			_mirrorinters = new List<Intersection>();
 			_shadowrays = new List<Ray>();
-			notShadow = new List<int>();
 
+			// add elements to corresponding lists
 			_lights.Add(light);
 			_lights.Add(light2);
 			
@@ -50,23 +50,36 @@ namespace INFOGR2022Template
 			primitives.Add(plane1);
 		}
 
+
+		// handle the intersection of primitives and mirrors
 		public Intersection Trace(Ray r)
         {
 			Intersection temp = null;
+
+			// intersect mirror ray and update temporary Intersection temp
 			foreach (IPrimitive p in primitives) temp = p.Intersect(r) ?? temp;
+
+			// check if the mirror ray intersected and check if the material of the intersecting primitive and check if the bounce limit is above 0
+			// then shoot a new mirror ray and draw it
 			if (temp != null && temp.prim.Material == 1 && r.MaxBounces > 0)
             {
 				Vector3 dir = r.Direction - 2 * (Vector3.Dot(r.Direction, temp.Normal) * temp.Normal);
 				Ray refl = new Ray(r.Origin + r.Direction * r.t + temp.Normal * 0.0001f, dir, r.ID, r.MaxBounces - 1);
+
+				//handle colored mirrors
 				OpenTKApp.app.tracerscreen.pixels[r.ID] = (OpenTKApp.app.tracerscreen.pixels[r.ID].ToVector() * temp.prim.Color).ToInt();
 
-				if (r.Origin.Y + r.Direction.Y * 100 == 256 && r.ID % 5 == 0) refl.DrawR();
+				// draw some mirror rays
+				if (refl.Origin.Y + refl.Direction.Y * 100 == 256 && refl.ID % 5 == 0) refl.DrawR();
 
 				return Trace(refl);
             }
+
 			return temp;
 		}
 
+
+		// shoot a ray through each pixel on the screen
 		public void Shoot()
         {
 			_rays.Clear();
@@ -88,25 +101,29 @@ namespace INFOGR2022Template
 
 		public void Render()
 		{
+			// draw spheres on debugscreen
 			foreach (IPrimitive s in primitives) (s as Sphere)?.Draw();
 
 			//draw eye and screen on debug
 			OpenTKApp.app.debugscreen.Line((int)cam.Position.X - 80, 400, (int)cam.Position.X + 80, 400, 0xFFFFFF);
 			OpenTKApp.app.debugscreen.Plot((int)Eye.X, (int)Eye.Z, 0xFFFFFF);
 
-
+			// draw each intersection on the tracerscreen
 			foreach (Intersection i in _intersections)
             {
 				if (i.prim.Material == 0)
                 {
-					Vector3 s = Vector3.Zero;
+					//calculate and set color of pixel
+					Vector3 temp_color = Vector3.Zero;
 					foreach (Light l in _lights)
 					{
-						Vector3 c;
+						Vector3 color;
 						Vector3 Origin = new Vector3(i.ray.Origin.X + i.ray.Direction.X * i.ray.t, i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t, i.ray.Origin.Z + i.ray.Direction.Z * i.ray.t);
 						Ray shadowray = new Ray(Origin + i.Normal.Normalized(), l.Position - Origin, i.ray.ID, 0);
 						shadowray.t = Vector3.Distance(l.Position, Origin);
-						c = (Math.Max(Vector3.Dot(i.Normal, shadowray.Direction), 0) * i.Color * l.Color);
+
+						// the color gets darker depending on the angle between the shadowray and the primitive's normal
+						color = (Math.Max(Vector3.Dot(i.Normal, shadowray.Direction), 0) * i.Color * l.Color);
 
 						Intersection temp = null;
 						foreach (IPrimitive p in primitives)
@@ -114,18 +131,18 @@ namespace INFOGR2022Template
 							temp = p.Intersect(shadowray) ?? temp;
 						}
 
+						// if angle between the direction of the shadow ray and the primitive's normal is smaller than zero, color is set to black
+						if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) color = Vector3.Zero;
 
-						if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) c = Vector3.Zero;
+						// draw some shadow rays on the debugscreen
 						if (shadowray.Origin.Y + shadowray.Direction.Y * shadowray.t == 256 && shadowray.ID % 10 == 0) shadowray.DrawS();
 
-						s += c;
+						temp_color += color;
 					}
-					OpenTKApp.app.tracerscreen.pixels[i.ray.ID] = (OpenTKApp.app.tracerscreen.pixels[i.ray.ID].ToVector() * s).ToInt();
+					// set calculated color of pixel to corresponding pixel
+					OpenTKApp.app.tracerscreen.pixels[i.ray.ID] = (OpenTKApp.app.tracerscreen.pixels[i.ray.ID].ToVector() * temp_color).ToInt();
                 }
-
             }
-
-			foreach (Intersection i in _mirrorinters) _intersections.Add(i);
 		}
 		
 

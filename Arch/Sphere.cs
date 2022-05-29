@@ -25,8 +25,11 @@ namespace INFOGR2022Template
             this.Material = material;
         }
 
+        // calculate intersection between ray and sphere
         public Intersection Intersect(Ray ray)
         {
+            // code was taken from slides
+
             Vector3 c = Center - ray.Origin;
             float t = Vector3.Dot(c, ray.Direction);
             Vector3 q = c - t * ray.Direction;
@@ -44,6 +47,7 @@ namespace INFOGR2022Template
             return null;
         }
 
+        // draw circle on debugscreen as a 100-sided polygon
         public void Draw()
         {
             int c = Color.ToInt();

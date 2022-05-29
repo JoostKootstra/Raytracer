@@ -20,6 +20,8 @@ namespace INFOGR2022Template
             prim = primitive;
             ray = r;
             Normal = normal.Normalized();
+
+            // set color of object at intersection, if color is null, color is set to black
             Color = prim?.Color?? Vector3.Zero;
         }
     }

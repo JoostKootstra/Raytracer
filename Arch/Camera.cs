@@ -29,6 +29,8 @@ namespace INFOGR2022Template
             Right = Vector3.Cross(LookAt, UpDir);
             this.Right = 80 * this.Right.Normalized();
 
+            // calculate corners of camera: p0 is top-left, p1 is top-right, p2 is bottom-left
+            // u is a vector from p0 to p1, v is a vector from p0 to p2
             p0 = Position + Up - Right;
             p1 = Position + Up + Right;
             p2 = Position - Up - Right;
@@ -36,6 +38,8 @@ namespace INFOGR2022Template
             v = p2 - p0;
         }
 
+
+        // update the corners of the camera to make moving camera possible
         public void Update()
         {
             p0 = Position + Up - Right;
