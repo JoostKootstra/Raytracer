@@ -40,16 +40,11 @@ namespace INFOGR2022Template
 			if (input.IsKeyDown(Key.Space)) tracer.light2.Position += new Vector3(0, 10, 0);
 			if (input.IsKeyDown(Key.ShiftLeft)) tracer.light2.Position -= new Vector3(0, 10, 0);
 
-
-
 			debugscreen.Clear(0);
-			tracerscreen.Clear(0);
+			tracerscreen.Clear(0xFFFFFF);
 			tracer.Shoot();
 			tracer.Render();
 			tracer._intersections.Clear();
-			//tracer.Render();
-
-
 		}
 	}
 }

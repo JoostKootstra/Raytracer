@@ -18,6 +18,20 @@ namespace INFOGR2022Template
             return (x << 16) + (y << 8) + z;
         }
 
+        public static Vector3 ToVector(this int i)
+        {
+            byte r, g, b;
+            unchecked
+            {
+                b = (byte)i;
+                i >>= 8;
+                g = (byte)i;
+                i >>= 8;
+                r = (byte)i;
+            }
+            return new Vector3(r / 255f, g / 255f, b / 255f);
+        }
+
         public static float ToP(this float f)
         {
             return f * (OpenTKApp.app.debugscreen.width) + (OpenTKApp.app.debugscreen.width / 2);

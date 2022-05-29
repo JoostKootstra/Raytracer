@@ -20,7 +20,7 @@ namespace INFOGR2022Template
             prim = primitive;
             ray = r;
             Normal = normal.Normalized();
-            Color = prim.Color;
+            Color = prim?.Color?? Vector3.Zero;
         }
     }
 }
