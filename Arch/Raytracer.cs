@@ -87,7 +87,7 @@ namespace INFOGR2022Template
 				foreach (IPrimitive p in primitives) temp = p.Intersect(shadowray) ?? temp;
 
 				if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) OpenTKApp.app.tracerscreen.pixels[shadowray.ID] = 0;
-				if (i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t == 256) shadowray.DrawS();
+				if (shadowray.Origin.Y + shadowray.Direction.Y * shadowray.t == 256 && shadowray.ID % 10 == 0) shadowray.DrawS();
 
             }
 		}
