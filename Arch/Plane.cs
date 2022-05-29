@@ -19,14 +19,16 @@ namespace INFOGR2022Template
         public Vector3 p2 { get; set; }
         public Vector3 p3 { get; set; }
         public float Distance { get; }
+        public int Material { get; }
         
 
-        public Plane(Vector3 normal, float distance, Vector3 Color)
+        public Plane(Vector3 normal, float distance, Vector3 Color, int material)
         {
             Position = new Vector3(200, 256, 256);
             this.Normal = normal.Normalized();
             this.Distance = distance;
             this.Color = Color;
+            Material = material;
         }
 
         public Intersection Intersect(Ray ray)

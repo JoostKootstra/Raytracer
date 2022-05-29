@@ -10,12 +10,15 @@ namespace INFOGR2022Template
     public class Light
     {
         public Vector3 Position { get; set; }
-        float Intensity { get; }
-        public Light(Vector3 position, float intensity)
+        public Vector3 Color { get; }
+        float t { get; set; }
+        public Light(Vector3 position, Vector3 Color)
         {
             this.Position = position;
-            this.Intensity = intensity;
+            this.Color = Color;
         }
+
+
 
     }
 }

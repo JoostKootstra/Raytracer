@@ -14,13 +14,15 @@ namespace INFOGR2022Template
         public Vector3 Position { get; }
         public Vector3 Center { get; }
         public float Radius { get; }
+        public int Material { get; }
 
-        public Sphere(Vector3 position, float radius, Vector3 color)
+        public Sphere(Vector3 position, float radius, Vector3 color, int material)
         {
             this.Position = position;
             this.Radius = radius;
             this.Center = position;
             this.Color = color;
+            this.Material = material;
         }
 
         public Intersection Intersect(Ray ray)

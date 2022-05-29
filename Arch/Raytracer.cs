@@ -15,17 +15,19 @@ namespace INFOGR2022Template
 		public List<Ray> _rays { get; set; }
 		public List<Ray> _shadowrays { get; set; }
 		public List<Intersection> _intersections { get; set; }
+		public List<Intersection> _mirrorinters { get; set; }
 		public List<IPrimitive> primitives { get; set; }
+		public List<int> notShadow { get; set; }
 
 		public Vector3 Eye = new Vector3(new Vector3(256, 256, 480));
 		public Camera cam = new Camera(new Vector3(256, 256, 400), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
-		public Light light = new Light(new Vector3(330, 256, 180), 1);
-		public Light light2 = new Light(new Vector3(330, 200, 180), 1);
+		public Light light = new Light(new Vector3(330, 256, 180), new Vector3(1, 0, 0));
+		public Light light2 = new Light(new Vector3(100, 256, 180), new Vector3(0, 0, 1));
 
-		Sphere sphere1 = new Sphere(new Vector3(256, 256, 100), 50, new Vector3(0, 0, 1));
-		Sphere sphere2 = new Sphere(new Vector3(128, 256, 100), 70, new Vector3(1, 0, 0));
-		Sphere sphere3 = new Sphere(new Vector3(384, 256, 100), 40, new Vector3(0, 1, 0));
-		Plane plane1 = new Plane(new Vector3(0, 1, 0), 0, new Vector3(1, 1, 1));
+		Sphere sphere1 = new Sphere(new Vector3(256, 256, 100), 50, new Vector3(0, 0, 1), 0);
+		Sphere sphere2 = new Sphere(new Vector3(128, 256, 100), 70, new Vector3(1, 0, 0), 0);
+		Sphere sphere3 = new Sphere(new Vector3(384, 256, 100), 40, new Vector3(0, 1, 0), 1);
+		Plane plane1 = new Plane(new Vector3(0, 1, 0), 0, new Vector3(1, 1, 1), 0);
 
 		public Raytracer()
         {
@@ -35,7 +37,9 @@ namespace INFOGR2022Template
 			_lights = new List<Light>();
 			_rays = new List<Ray>();
 			_intersections = new List<Intersection>();
+			_mirrorinters = new List<Intersection>();
 			_shadowrays = new List<Ray>();
+			notShadow = new List<int>();
 
 			_lights.Add(light);
 			_lights.Add(light2);
@@ -77,19 +81,32 @@ namespace INFOGR2022Template
 
 			foreach (Intersection i in _intersections)
             {
-				Vector3 Origin = new Vector3(i.ray.Origin.X + i.ray.Direction.X * i.ray.t, i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t, i.ray.Origin.Z + i.ray.Direction.Z * i.ray.t);
-				Ray shadowray = new Ray(Origin + i.Normal.Normalized(), light.Position - Origin, i.ray.ID);
-				shadowray.t = Vector3.Distance(light.Position, Origin);
+				Vector3 s = Vector3.Zero;
+				foreach (Light l in _lights)
+                {
+					Vector3 c;
+					Vector3 Origin = new Vector3(i.ray.Origin.X + i.ray.Direction.X * i.ray.t, i.ray.Origin.Y + i.ray.Direction.Y * i.ray.t, i.ray.Origin.Z + i.ray.Direction.Z * i.ray.t);
+					Ray shadowray = new Ray(Origin + i.Normal.Normalized(), l.Position - Origin, i.ray.ID);
+					shadowray.t = Vector3.Distance(l.Position, Origin);
+					c = (Math.Max(Vector3.Dot(i.Normal, shadowray.Direction), 0) * i.Color * l.Color);
 
-				OpenTKApp.app.tracerscreen.pixels[i.ray.ID] = (Math.Max(Vector3.Dot(i.Normal, shadowray.Direction), 0) * i.Color).ToInt();
+					Intersection temp = null;
+					foreach (IPrimitive p in primitives)
+                    {
+						temp = p.Intersect(shadowray) ?? temp;
+					}
+					
 
-				Intersection temp = null;
-				foreach (IPrimitive p in primitives) temp = p.Intersect(shadowray) ?? temp;
+					if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) c = Vector3.Zero;
+					if (shadowray.Origin.Y + shadowray.Direction.Y * shadowray.t == 256 && shadowray.ID % 10 == 0) shadowray.DrawS();
 
-				if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) OpenTKApp.app.tracerscreen.pixels[shadowray.ID] = 0;
-				if (shadowray.Origin.Y + shadowray.Direction.Y * shadowray.t == 256 && shadowray.ID % 10 == 0) shadowray.DrawS();
+					s += c;
+				}
+				OpenTKApp.app.tracerscreen.pixels[i.ray.ID] = s.ToInt();
 
             }
+
+			foreach (Intersection i in _mirrorinters) _intersections.Add(i);
 		}
 		
 
