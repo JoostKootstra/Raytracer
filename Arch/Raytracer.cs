@@ -9,6 +9,8 @@ namespace INFOGR2022Template
 {
     public class Raytracer
     {
+		// set the field of view in degrees
+		public double fov = 90;
         public List<Sphere> _spheres { get; set; }
 		public List<Plane> _planes { get; set; }
         public List<Light> _lights { get; set; }
@@ -18,7 +20,7 @@ namespace INFOGR2022Template
 		public List<Intersection> _mirrorinters { get; set; }
 		public List<IPrimitive> primitives { get; set; }
 		
-		public Vector3 Eye = new Vector3(new Vector3(256, 256, 480));
+		public Vector3 Eye = new Vector3(new Vector3(256, 256, 400));
 		public Camera cam = new Camera(new Vector3(256, 256, 400), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
 		public Light light = new Light(new Vector3(330, 256, 180), new Vector3(1, 0, 0));
 		public Light light2 = new Light(new Vector3(100, 256, 180), new Vector3(1, 1, 1));
@@ -30,6 +32,10 @@ namespace INFOGR2022Template
 
 		public Raytracer()
         {
+			// adjusts the camera to the set field of view
+			double fovradian = ((fov / 2) * Math.PI) / 180;
+			Eye.Z += 80 / (float)Math.Tan(fovradian);
+
 			// set Lists
 			primitives = new List<IPrimitive>();
 			_spheres = new List<Sphere>();
