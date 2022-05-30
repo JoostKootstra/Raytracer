@@ -40,6 +40,7 @@ namespace INFOGR2022Template
             if ((t < ray.t) && (t > 0))
             {
                 ray.t = t;
+                // calculate normal 
                 Vector3 Normal = (ray.Origin + ray.Direction * ray.t) - Position;
                 Intersection temp = new Intersection(this, ray, Normal);
                 return temp;

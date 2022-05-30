@@ -20,13 +20,14 @@ namespace INFOGR2022Template
 		
 		public Vector3 Eye = new Vector3(new Vector3(256, 256, 480));
 		public Camera cam = new Camera(new Vector3(256, 256, 400), new Vector3(0, 0, -480), new Vector3(0, 256, 0));
-		public Light light = new Light(new Vector3(330, 256, 180), new Vector3(1, 0, 0));
+		public Light light = new Light(new Vector3(330, 256, 180), new Vector3(1, 1, 1));
 		public Light light2 = new Light(new Vector3(100, 256, 180), new Vector3(1, 1, 1));
 
 		Sphere sphere1 = new Sphere(new Vector3(256, 256, 100), 50, new Vector3(0, 0, 1), 0);
 		Sphere sphere2 = new Sphere(new Vector3(128, 256, 100), 70, new Vector3(1, 0, 0), 0);
-		Sphere sphere3 = new Sphere(new Vector3(384, 256, 100), 40, new Vector3(0, 1, 0), 1);
-		Plane plane1 = new Plane(new Vector3(0, 1, 0), 0, new Vector3(1, 1, 1), 0);
+		Sphere sphere3 = new Sphere(new Vector3(384, 256, 100), 70, new Vector3(0, 1, 0), 1);
+		Plane plane1 = new Plane(new Vector3(256, 0, 256), new Vector3(1, 0, 0), new Vector3(0, 0, -1), new Vector3(1, 1, 1), 2);
+		Plane plane2 = new Plane(new Vector3(256, 510, 256), new Vector3(1, 0, 0), new Vector3(0, -0.25f, -1), new Vector3(0, 0, 0), 0);
 
 		public Raytracer()
         {
@@ -44,10 +45,11 @@ namespace INFOGR2022Template
 			_lights.Add(light);
 			_lights.Add(light2);
 			
-			primitives.Add(sphere1);
+			//primitives.Add(sphere1);
 			primitives.Add(sphere2);
 			primitives.Add(sphere3);
 			primitives.Add(plane1);
+			primitives.Add(plane2);
 		}
 
 
@@ -111,7 +113,7 @@ namespace INFOGR2022Template
 			// draw each intersection on the tracerscreen
 			foreach (Intersection i in _intersections)
             {
-				if (i.prim.Material == 0)
+				if (i.prim.Material == 0 || i.prim.Material == 2)
                 {
 					//calculate and set color of pixel
 					Vector3 temp_color = Vector3.Zero;
@@ -122,8 +124,10 @@ namespace INFOGR2022Template
 						Ray shadowray = new Ray(Origin + i.Normal.Normalized(), l.Position - Origin, i.ray.ID, 0);
 						shadowray.t = Vector3.Distance(l.Position, Origin);
 
-						// the color gets darker depending on the angle between the shadowray and the primitive's normal
-						color = (Math.Max(Vector3.Dot(i.Normal, shadowray.Direction), 0) * i.Color * l.Color);
+						if (i.prim is Plane && i.prim.Material == 2) color = ((Plane)i.prim).CalcColor(Origin, Vector3.Zero, Vector3.One);
+						else color = i.prim.Color;
+
+						
 
 						Intersection temp = null;
 						foreach (IPrimitive p in primitives)
@@ -131,8 +135,11 @@ namespace INFOGR2022Template
 							temp = p.Intersect(shadowray) ?? temp;
 						}
 
+						
 						// if angle between the direction of the shadow ray and the primitive's normal is smaller than zero, color is set to black
-						if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) color = Vector3.Zero;
+						if (temp != null || Vector3.Dot(shadowray.Direction, i.Normal) < 0) color *= 0.05f * Vector3.One;
+						// the color gets darker depending on the angle between the shadowray and the primitive's normal
+						else color *= (Math.Max(Vector3.Dot(i.Normal, shadowray.Direction), 0) * l.Color + 0.05f * Vector3.One);
 
 						// draw some shadow rays on the debugscreen
 						if (shadowray.Origin.Y + shadowray.Direction.Y * shadowray.t == 256 && shadowray.ID % 10 == 0) shadowray.DrawS();

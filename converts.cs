@@ -19,7 +19,7 @@ namespace INFOGR2022Template
             return (x << 16) + (y << 8) + z;
         }
 
-        // convert integer color to Vector3 color by 
+        // convert integer color to Vector3 color by assigning i to a byte and then shifting i
         public static Vector3 ToVector(this int i)
         {
             byte r, g, b;
