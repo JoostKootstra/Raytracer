@@ -23,7 +23,7 @@ namespace INFOGR2022Template
 		// tick: renders one frame
 		public void Tick()
 		{
-			
+			// user input via keyboard for changing the position of lights and eye
 			tracer.cam.Update();
 			input = Keyboard.GetState();
 			
@@ -43,6 +43,8 @@ namespace INFOGR2022Template
 			if (input.IsKeyDown(Key.Down)) tracer._lights[lselect].Position += new Vector3(0, 0, 10);
 			if (input.IsKeyDown(Key.Space)) tracer._lights[lselect].Position += new Vector3(0, 10, 0);
 			if (input.IsKeyDown(Key.ShiftLeft)) tracer._lights[lselect].Position -= new Vector3(0, 10, 0);
+
+
 
 			debugscreen.Clear(0);
 			tracerscreen.Clear(0xFFFFFF);
